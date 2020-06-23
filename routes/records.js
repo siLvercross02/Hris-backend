@@ -60,10 +60,15 @@ router.get('/org_records',jsonDataParser,(req,res,next) => {
     });
 });
 
-router.get('/emp_leave_records/',jsonDataParser,(req,res,next) => {
-    const token = req.params.token;
-
-    console.log(token);
+router.get('/emp_leave_records/:uid',jsonDataParser,(req,res,next) => {
+    let uid = req.params.uid;
+    DB.select('*').from('tbl_leave').where('uid', uid).orderBy('status')
+    .then(result => {
+        console.log(result);
+        res.send(JSON.stringify({"status": 200, "error": null, "response": result}));
+    }).catch(error => {
+        res.send(JSON.stringify({"status": 500, "error": 'Error', "response": null}));
+    });
 });
 
 
